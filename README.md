@@ -16,35 +16,32 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+In the output, you'll find options to open the app in a(n)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Running Tests
 
-## Get a fresh project
+To test the application run `npm run test`. Tests are run via Jest.
 
-When you're ready, run:
+## Linting
 
-```bash
-npm run reset-project
-```
+To lint the application, run `npm run lint`.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Dev Docs
 
-## Learn more
+Single screen, most of the logic happens in the CharacterList component.
 
-To learn more about developing your project with Expo, look at the following resources:
+On first load, the SWApi is called, which returns all the characters available.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Since there is a built in "pagination" on SWApi, which limits the number of characters returned in a single query to 10,
+I prefered looping through the API requests so that I only go to the API once for all the data, instead of firing multiple requests on every user interaction such as sorting or searching by name.
+This ensures that we always have the whole character list as a source, and we dont fetch the API several times hoping we dont hit rate limiting.
 
-## Join the community
+After every user interaction, the whole list of characters is subject to sorting/pagination/filtering. This ensures the the whole of the available source is used, not just what is on the screen at the moment.
+Pagination is calculated dinamically to ensure that the page size is customizable, and the Previous/Next buttons are always available/disabled correctly.
 
-Join our community of developers creating universal apps.
+Searching by name is also case insensitive.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Tests cover the business logic such as proper sorting and the single API call.
